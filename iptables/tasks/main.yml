@@ -27,3 +27,9 @@
     dest: "/etc/iptables/rules.v6"
     mode: 0644
   notify: restart netfilter-persistent
+
+- name: install fail2ban
+  apt:
+    name: "fail2ban"
+    state: latest
+  when: install_fail2ban

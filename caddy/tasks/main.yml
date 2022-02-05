@@ -34,12 +34,10 @@
 
 - name: install caddy
   shell: |
-    mkdir -p /tmp/caddy-{{ caddy_version }}
-    cd /tmp/caddy-{{ caddy_version }}
-    curl -fsSL -o caddy 'https://caddyserver.com/api/download?os=linux&arch=amd64&idempotency=74355242943854'
-    install -m 0755 caddy /usr/local/bin/caddy-{{caddy_version}}
-    setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy-{{caddy_version}}
-    ln -sf /usr/local/bin/caddy-{{caddy_version}} /usr/local/bin/caddy
+    cd `mktemp -d`
+    curl -fsSL -o caddy 'https://caddyserver.com/api/download?os=linux&arch=amd64'
+    install -m 0755 caddy /usr/local/bin/caddy
+    setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy
   args:
     warn: false
   when: caddy_installed_version != caddy_version

@@ -13,7 +13,7 @@
     home: "{{ caddy_home_dir }}"
     shell: /sbin/nologin
 
-- name: create directories
+- name: create caddy config directories
   file:
     state: directory
     path: "{{ item }}"
@@ -21,9 +21,16 @@
     group: www-data
     mode: 0750
   with_items:
-    - "{{ caddy_home_dir }}"
     - "/etc/caddy"
     - "/etc/ssl/caddy"
+
+- name: create caddy home directory
+  file:
+    state: directory
+    path: "{{ caddy_home_dir }}"
+    owner: www-data
+    group: www-data
+    mode: 0755
 
 - name: determine installed caddy version
   shell: "caddy version | awk '{ print $1 }' || true"

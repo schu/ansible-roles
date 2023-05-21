@@ -32,6 +32,14 @@
     group: www-data
     mode: 0755
 
+- name: create caddy log directory
+  file:
+    state: directory
+    path: "/var/log/caddy"
+    owner: www-data
+    group: www-data
+    mode: 0755
+
 - name: determine installed caddy version
   shell: "caddy version | awk '{ print $1 }' || true"
   register: caddy_version_output

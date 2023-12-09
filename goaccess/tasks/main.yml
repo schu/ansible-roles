@@ -1,0 +1,28 @@
+---
+- name: Install goaccess
+  block:
+    - name: Add goaccess GPG key
+      ansible.builtin.get_url:
+        # https://goaccess.io/download
+        url: https://deb.goaccess.io/gnugpg.key
+        dest: /usr/share/keyrings/goaccess.asc
+        checksum: sha256:4068bb00eb84b64e9f82a865931652d08d466ace0cb222221d0568c068abbb9a
+
+    - name: Add goaccess apt repo
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/goaccess.asc] https://deb.goaccess.io/ focal main"
+        state: present
+
+    - name: Install upstream goaccess deb package
+      ansible.builtin.apt:
+        name: goaccess
+        state: present
+
+    - name: Create goaccess reports dir
+      file:
+        state: directory
+        path: "{{ goaccess_reports_dir }}"
+        owner: root
+        group: root
+        mode: 0755
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

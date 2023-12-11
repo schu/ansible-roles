@@ -12,7 +12,7 @@ Restart=always
 User=oauthproxy
 Group=oauthproxy
 
-ExecStart=/usr/local/bin/oauth2-proxy --config=/etc/oauth2-proxy.cfg
+ExecStart=/usr/local/bin/oauth2-proxy --config=/etc/oauth2-proxy-%i.cfg
 ExecReload=/bin/kill -HUP $MAINPID
 
 TimeoutStopSec=5s

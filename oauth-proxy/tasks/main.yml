@@ -42,18 +42,18 @@
 - name: install oauth proxy config file
   copy:
     src: "{{ oauthproxy_config }}"
-    dest: /etc/oauth2-proxy.cfg
+    dest: "/etc/oauth2-proxy-{{ oauthproxy_name }}.cfg"
     owner: oauthproxy
     group: oauthproxy
   notify: reload oauthproxy
 
-- name: install oauth2-proxy.service
+- name: install oauth2-proxy@.service template
   copy:
-    src: oauth2-proxy.service
-    dest: /etc/systemd/system/oauth2-proxy.service
+    src: oauth2-proxy@.service
+    dest: /etc/systemd/system/oauth2-proxy@.service
   notify: restart oauthproxy
 
 - name: enable oauth2-proxy.service
   systemd:
-    name: oauth2-proxy
+    name: "oauth2-proxy@{{ oauthproxy_name }}"
     enabled: true

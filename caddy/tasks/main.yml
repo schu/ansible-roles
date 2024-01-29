@@ -41,16 +41,20 @@
     mode: 0755
 
 - name: determine installed caddy version
-  shell: "caddy version | awk '{ print $1 }' || true"
+  shell: caddy version | awk '{ print $1 }' || true
   register: caddy_version_output
 
-- name: set caddy_installed_version fact
-  set_fact: caddy_installed_version="{{caddy_version_output.stdout}}"
+- name: set caddy_installed_version and caddy_version fact
+  set_fact: 
+    caddy_installed_version: "{{ caddy_version_output.stdout | regex_replace('v') }}"
+    caddy_version: "{{ caddy_version | regex_replace('v') }}"
 
 - name: install caddy
   shell: |
+    set -e
     cd `mktemp -d`
-    curl -fsSL -o caddy 'https://caddyserver.com/api/download?os=linux&arch=amd64'
+    curl -fsSL -o caddy.tar.gz 'https://github.com/caddyserver/caddy/releases/download/v{{caddy_version}}/caddy_{{caddy_version}}_linux_amd64.tar.gz'
+    tar -xf caddy.tar.gz
     install -m 0755 caddy /usr/local/bin/caddy
     setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy
   when: caddy_installed_version != caddy_version

@@ -1,4 +1,5 @@
 ---
+arch: amd64
 caddy_version: 2.7.6
 caddy_home_dir: /var/www
 caddy_file: Caddyfile
